@@ -130,6 +130,10 @@ button {
   justify-content: center;
 }
 
+.key:hover {
+    box-shadow: 0 0 0 3px #3a3f58;
+}
+
 .chosen {
   background: #3a3f58;
   border-radius: 5px;
@@ -140,6 +144,7 @@ button {
 .wrong {
   background: #f7a964;
   color: #FFFFFF;
+  cursor: not-allowed;
 }
 
 .btn__reset {
