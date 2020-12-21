@@ -160,7 +160,7 @@
         }   else {
             bodyNode.classList.add('body-lose');
             this.revealPhrase();
-            endMessage.innerText = `So close! ${this.Phrase.adjective[0].toUpperCase()}${this.Phrase.adjective.substring(1, this.Phrase.adjective.length)} ${this.Phrase.noun} are tough to guess.`; 
+            endMessage.innerText = `So close! ${this.Phrase.adjective[0].toUpperCase()}${this.Phrase.adjective.substring(1, this.Phrase.adjective.length)} ${this.Phrase.noun} are a tough guess.`; 
             endMessage.style.display = 'inline-block';
             return;
         }
