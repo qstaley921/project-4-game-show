@@ -18,7 +18,6 @@ let playing = false;
 
 startBTN.addEventListener('click', () => {
     playing = true;
-    console.log(playing);
     game.startGame();
 });
 
