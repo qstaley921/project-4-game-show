@@ -12,8 +12,8 @@
      - a `new Game() class` with two `constructors()`: 
         - `this.missed` {**integer**} - stores the total number of missed guesses during the game
         - `this.Phrase` {**Object**} - stores a Phrase object 
-    -  7 Methods *yikes – could I have gotten away with less ...* :flushed:
-        1. `createPhrase()` - creates a random phrase based on random parts of speech; that phrase is stored in a a `new Phrase()` object. 
+    -  7 Methods *// yikes – could I have gotten away with less ...* :flushed:
+        1. `createPhrase()` - creates a random phrase based on random parts of speech; that phrase is stored in a `new Phrase()` object. 
         2. `startGame()` - resets styles and values from last game; initiates `createPhrase()` method and begins the game again
         3. `handleInteraction(target)` - calls various `Phrase.Methods()` based on a `target @param` 
         4. `checkForWin()` - checks if any letters remain to be guessed
@@ -22,10 +22,10 @@
         7. `gameOver(gameWon)` - styles the page based `gameWon` parameter. If true, the page is styled victoriously :smile:. If false, the page is styled unfortunately :rage: 
 3. Phrase.js
     - stores a `this.phrase` string
-    - 3 Methods *that sounds better until you look at the complexity LoL :weary:* 
+    - 3 Methods *// that sounds better until you look at the complexity LoL :weary:* 
         1. `addPhraseToDisplay()` - creates a `<ul>` for each of the `this.phrase` words, and creates a `<li>` for each of the `this.phrase` letters. 
         
-        *that seems simple enough, except in order to do that, I put the `this.phrase` string into its own `phraseArray`, then looped over the array based on the number of `/\s/` in the array (assuming a space equals a word), then within the loop, looped over the remaining characters, `.shifting()` my the characters out of the `phraseArray` into individual `<li>${phraseArray[i]}<li>` items until the `phraseArray` was emptied. And I did all this so letters within words didn't break from the line on smaller viewports, but the entire word would carry over. There's no way this is the best solution because it feels mightily convoluted. Oh well*
+        *that seems simple enough, except in order to do that, I put the `this.phrase` string into its own `phraseArray`, then looped over the array based on the number of `/\s/` in the array (assuming a space equals a word), then within the loop, looped over the remaining characters, `.shifting()` the characters out of the `phraseArray` into individual `<li>${phraseArray[i]}<li>` items until the `phraseArray` was emptied. And I did all this so letters within words didn't break from the line on smaller viewports, but the entire word would carry over. There's no way this is the best solution because it feels mightily convoluted. Oh well*
         2. `checkLetter(letter)` - checks the `target.innerText` against the `node.innerText` of a the aforementioned `<li>` nodes. For every `node.innerText` that === `target.innerText` that `node` is pushed to a `matches` array. The `matches` array is then returned `const matches` within the `Game.handleInteraction()` — more on that below. 
         3. `showMatches(matches)` - styles and 'reveals' the `<li>` node if it is included in the aforementioned `matches` node list. 
 
