@@ -5,42 +5,52 @@
  class Game {
     constructor() {
         this.missed = 0;
-        this.Phrase = null; // holds a phrase object
+        this.phrases = [];
+        this.activePhrase = null; // holds a phrase object
     }
 
     /**
      * Generates a random phrase based on random parts of speech 
-     * @returns {obj} phrase - with a string param 
      */
     createPhrase( ) {
-        const phrases = [];
-        let adjective = '';
-        let noun = '';
-        let declaration = '';
-        let verb = '';
-        const words = {  // excuse the absurdities; I got carried away. This is an object of arrays. 
-            adjective: ['rich', 'ugly', 'divorced', 'skilled','widowed', 'frisky', 'pregnant', 'infected', 'smart', 'scared', 'pretty', 'nice', 'evil', 'virgin', 'married', 'baptised', 'acquitted', 'drunk', 'christian'],
-            noun: ['dogs', 'cats', 'husbands', 'women', 'athletes','housewives', 'zoomers', 'cosmonauts','immigrants','hipsters', 'lawyers', 'priests', 'artists', 'fish', 'zombies', 'veterans', 'inmates', 'hippies'],
-            declaration: ['never', 'always', 'rarely', 'long to','often', 'cannot', 'refuse to', 'are willing to', 'love to', 'eagerly'],
-            verb: ['cry', 'smile', 'snuggle','surrender', 'offend', 'lose', 'win','say thank you','settle','beg', 'spoon','die', 'nark', 'drive','eat', 'lie', 'sleep', 'fart', 'sweat', 'puke', 'help', 'talk', 'divorce', 'kill', 'have sex', 'remarry', 'pray', 'protest']
-        } 
-        /**
-         * generates a random index based on @param.length
-         * @param {array} wordList - an object of arrays 
-         */
-        const randomIndex = (wordList) => Math.floor( Math.random() * wordList.length );
-        let randomPhrase = '';
+        for (let i = 0; i < 5; i++) {
+            let randomPhrase = '';
+            let adjective = '';
+            let noun = '';
+            let declaration = '';
+            let verb = '';
+            const words = {  // excuse the absurdities; I got carried away. This is an object of arrays. 
+                adjective: ['rich', 'ugly', 'divorced', 'skilled','widowed', 'frisky', 'pregnant', 'infected', 'smart', 'scared', 'pretty', 'nice', 'evil', 'virgin', 'married', 'baptised', 'acquitted', 'drunk', 'christian'],
+                noun: ['dogs', 'cats', 'husbands', 'women', 'athletes','housewives', 'zoomers', 'cosmonauts','immigrants','hipsters', 'lawyers', 'priests', 'artists', 'fish', 'zombies', 'veterans', 'inmates', 'hippies'],
+                declaration: ['never', 'always', 'rarely', 'long to','often', 'cannot', 'refuse to', 'are willing to', 'love to', 'eagerly'],
+                verb: ['cry', 'smile', 'snuggle','surrender', 'offend', 'lose', 'win','say thank you','settle','beg', 'spoon','die', 'nark', 'drive','eat', 'lie', 'sleep', 'fart', 'sweat', 'puke', 'help', 'talk', 'divorce', 'kill', 'have sex', 'remarry', 'pray', 'protest']
+            } 
+            /**
+             * generates a random index based on @param.length
+             * @param {array} wordList - an object of arrays 
+             */
+            const randomIndex = (wordList) => Math.floor( Math.random() * wordList.length );
 
-        for (let prop in words) {
-            const list = words[`${prop}`];
-            const index = randomIndex(list);
-            if (prop === 'adjective') adjective = words[`${prop}`][index];
-            if (prop === 'noun') noun = words[`${prop}`][index];
-            if (prop === 'declaration') declaration = words[`${prop}`][index];
-            if (prop === 'verb') verb = words[`${prop}`][index];
+            for (let prop in words) {
+                const list = words[`${prop}`];
+                const index = randomIndex(list);
+                if (prop === 'adjective') adjective = words[`${prop}`][index];
+                if (prop === 'noun') noun = words[`${prop}`][index];
+                if (prop === 'declaration') declaration = words[`${prop}`][index];
+                if (prop === 'verb') verb = words[`${prop}`][index];
+            }
+            randomPhrase = `${adjective} ${noun} ${declaration} ${verb}`; 
+            this.phrases.push(new Phrase(randomPhrase, noun, adjective, verb)); 
         }
-        randomPhrase = `${adjective} ${noun} ${declaration} ${verb}`; 
-        return new Phrase(randomPhrase, noun, adjective, verb); 
+    }
+
+    /**
+     * Merely gets a random phrase from the Game.phrases array 
+     * @return {object} - Phrase - a Phrase object
+     */
+    getRandomPhrase() {
+        const randomIndex = () => Math.floor( Math.random() * this.phrases.length );
+        return this.phrases[randomIndex()];
     }
 
     /**
@@ -67,8 +77,9 @@
         game.missed = 0; // resets the game's misses
 
         // begins the game ... steps 1-4. 
-        this.Phrase = this.createPhrase();
-        this.Phrase.addPhraseToDisplay(); 
+        this.createPhrase(); 
+        this.activePhrase = this.getRandomPhrase();
+        this.activePhrase.addPhraseToDisplay(); 
         overlayHTML.style.display = 'none';
         overlayHTML.className = 'start';
     }
@@ -83,11 +94,11 @@
      */
     handleInteraction( target ) {
         const letter = target.innerText; // a 1 character string
-        const matches = this.Phrase.checkLetter(letter); // returns an array of nodes whose `letter.innerText` is the same as `target.innerText`
+        const matches = this.activePhrase.checkLetter(letter); // returns an array of nodes whose `letter.innerText` is the same as `target.innerText`
 
         if (matches.length > 0) { // if a match was made
             target.classList.add('chosen'); 
-            this.Phrase.showMatches(matches); 
+            this.activePhrase.showMatchedLetter(matches); 
             if (this.checkForWin()) {
                 this.gameOver(true);
             }
@@ -154,12 +165,12 @@
         playing = false;
         if (gameWon) {
             bodyNode.classList.add('body-win');
-            endMessage.innerText = `Congrats! ${this.Phrase.adjective[0].toUpperCase()}${this.Phrase.adjective.substring(1, this.Phrase.adjective.length)} ${this.Phrase.noun} always win. Now, enough of this. Go ${this.Phrase.verb}. `; 
+            endMessage.innerText = `Congrats! ${this.activePhrase.adjective[0].toUpperCase()}${this.activePhrase.adjective.substring(1, this.activePhrase.adjective.length)} ${this.activePhrase.noun} always win. Now, enough of this. Go ${this.activePhrase.verb}. `; 
             endMessage.style.display = 'inline-block';
         }   else {
             bodyNode.classList.add('body-lose');
             this.revealPhrase();
-            endMessage.innerText = `So close! ${this.Phrase.adjective[0].toUpperCase()}${this.Phrase.adjective.substring(1, this.Phrase.adjective.length)} ${this.Phrase.noun} are a tough guess. Next time, don't ${this.Phrase.verb}.`; 
+            endMessage.innerText = `So close! ${this.activePhrase.adjective[0].toUpperCase()}${this.activePhrase.adjective.substring(1, this.activePhrase.adjective.length)} ${this.activePhrase.noun} are a tough guess. Next time, don't ${this.activePhrase.verb}.`; 
             endMessage.style.display = 'inline-block';
             return;
         }

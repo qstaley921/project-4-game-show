@@ -2,7 +2,7 @@
  * Project 4 - OOP Game App
  * app.js */
 
-const game = new Game(); 
+let game = null;
 const bodyNode = document.querySelector('body');
 const startBTN = document.querySelector('#btn__start');
 const btnDiv = document.querySelector('#btn-div');
@@ -17,11 +17,13 @@ const letterNodes = document.getElementsByClassName('letter'); // selects all th
 let playing = false;
 
 startBTN.addEventListener('click', () => {
+    game = new Game(); // this is superfluous, but I'm just trying to follow the 'How you'll be graded'
     playing = true;
     game.startGame();
 });
 
 resetBTN.addEventListener('click', () => {
+    game = new Game();
     playing = true;
     game.startGame();
 });

@@ -7,6 +7,9 @@
  Possible point of failure: 
  > As you'll see below, because my `createPhrase()` method generates a random phrase from a list of random words, it felt redundant to include a `Game.phrases` property since there are not a 'set' amount of phrases, but a combination factor of, well, a lot. At that, the `game.Phrase` is what Treehouse has named `Game.activePhrase` – `@return {object}`. Hopefully, that's not an issue for grading. However, if it is, I'm happy to add the `Game.phrases` property for cumpulsory's sake. :stuck_out_tongue_closed_eyes: Fail me if you must. 
 
+Update:
+> Because my game did not 'follow the instructions', I've since added a `Game.phrases` and `Game.activePhrase`. These should work along the lines of expectation. **HOWEVER**,  I refuse to re-show the overlay on Game completion because I want the user to see the phrase. If this is a major problem, obviously, 'it needs work.' But I can't butcher it just yet. Otherwise, the game should work just fine, and you can ignore the below readme, which resembles 'my' version of the game, not — explicity — Treehouse's. 
+
 # Components
 1. app.js
     - stores all the `document.querySelectors()` in various variables :wink:
@@ -29,7 +32,7 @@
         1. `addPhraseToDisplay()` - creates a `<ul>` for each of the `this.phrase` words, and creates a `<li>` for each of the `this.phrase` letters. 
          - *that seems simple enough, except in order to do that, I put the `this.phrase` string into its own `phraseArray`, then looped over the array based on the number of `/\s/` in the array (assuming a space equals a word), then within the loop, looped over the remaining characters, `.shifting()` the characters out of the `phraseArray` into individual `<li>${phraseArray[i]}<li>` items until the `phraseArray` was emptied. And I did all this so letters within words didn't break from the line on smaller viewports, but the entire word would carry over. There's no way this is the best solution because it feels mightily convoluted. Oh well*
         2. `checkLetter(letter)` - checks the `target.innerText` against the `node.innerText` of a the aforementioned `<li>` nodes. For every `node.innerText` that === `target.innerText` that `node` is pushed to a `matches` array. The `matches` array is then returned `const matches` within the `Game.handleInteraction()` — more on that below. 
-        3. `showMatches(matches)` - styles and 'reveals' the `<li>` node if it is included in the aforementioned `matches` node list. 
+        3. `showMatchedLetter(matches)` - styles and 'reveals' the `<li>` node if it is included in the aforementioned `matches` node list. 
 
  ## Step 0
  0. *Because even step zero has a zeroeth step* `const game = new Game()` - create a game. 

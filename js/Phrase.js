@@ -4,7 +4,7 @@
 
  class Phrase {
     constructor(phrase, noun, adjective, verb) {
-        this.phrase = phrase.toLowerCase(); // holds a string
+        this.phrase = phrase; // holds a string
         this.noun = noun;
         this.adjective = adjective;
         this.verb = verb;
@@ -50,7 +50,7 @@
      * checks if passed letter is in the phrase 
      * @param {string} letter - the letter the player has clicked 
      * @returns {array of nodes} matches -  an array of the filtered, correct letters
-     * passes matches to this.showMatches()
+     * passes matches to this.showMatchedLetter()
      */
     checkLetter( letter ) {
         const matches = [];
@@ -66,7 +66,7 @@
      * displays passed letter on screen when/if a match is found
      * @param {array} matches  - 'unhides' matches from this.checkletter() 
      */
-    showMatches( matches ) {
+    showMatchedLetter( matches ) {
         for(let match of matches) {
             match.classList.add('show');
             match.classList.remove('hide');
