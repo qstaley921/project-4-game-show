@@ -14,14 +14,19 @@ const overlayHTML = document.querySelector('#overlay');
 const phraseHTML = document.querySelector('#phrase');
 const heartNodes = document.querySelectorAll('.tries > img');
 const letterNodes = document.getElementsByClassName('letter'); // selects all the phrase's letters
+let playing = false;
 
 startBTN.addEventListener('click', () => {
+    playing = true;
+    console.log(playing);
     game.startGame();
 });
 
 resetBTN.addEventListener('click', () => {
+    playing = true;
     game.startGame();
 });
+
 
 keyboardHTML.addEventListener('click', (event) => {
     if( event.target.nodeName == 'BUTTON' ) {
@@ -29,14 +34,16 @@ keyboardHTML.addEventListener('click', (event) => {
     }
 });
 
+
 /**
  * listens for keyboard events and 
  * handlesInteraction() based on key pressed
  */
+
 document.addEventListener('keydown', (event) => {
     for(const key of keysHTML) {
-        if(key.innerText === event.key) {
+        if(key.innerText === event.key && playing) {
             game.handleInteraction(key);
         }
     }
-})
+});

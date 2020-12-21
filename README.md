@@ -2,7 +2,10 @@
  *A Team Treehouse Object-Oriented Game Show App*
 
  Editor's note:
- > This README is written as a programatic step-through. 
+ > This README is written as a programatic step-through — sorta. 
+
+ Possible point of failure: 
+ > As you'll see below, because my `createPhrase()` method generates a random phrase from a list of random words, it felt redundant to include a `Game.phrases` property since there are not a 'set' amount of phrases, but a combination factor of, well, a lot. At that, the `game.Phrase` is what Treehouse has named `Game.activePhrase` – `@return {object}`. Hopefully, that's not an issue for grading. However, if it is, I'm happy to add the `Game.phrases` property for cumpulsory's sake. :stuck_out_tongue_closed_eyes: Fail me if you must. 
 
 # Components
 1. app.js

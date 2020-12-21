@@ -80,7 +80,8 @@ button {
 #btn__start,
 #btn__reset {
 	width: 200px;
-	margin: 0 auto;
+    margin: 0 auto;
+    margin-top: 25px;
 }
 
 .main-container {

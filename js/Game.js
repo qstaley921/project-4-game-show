@@ -40,7 +40,7 @@
             if (prop === 'verb') verb = words[`${prop}`][index];
         }
         randomPhrase = `${adjective} ${noun} ${declaration} ${verb}`; 
-        return new Phrase(randomPhrase, noun, adjective); 
+        return new Phrase(randomPhrase, noun, adjective, verb); 
     }
 
     /**
@@ -71,7 +71,6 @@
         this.Phrase.addPhraseToDisplay(); 
         overlayHTML.style.display = 'none';
         overlayHTML.className = 'start';
-        console.log(`The current phrase is: ${this.Phrase.phrase}`)
     }
 
 
@@ -152,15 +151,15 @@
         keyboardHTML.style.display = 'none';
         btnDiv.style.display = 'block';
         endMessage.innerText = '';
-        
+        playing = false;
         if (gameWon) {
             bodyNode.classList.add('body-win');
-            endMessage.innerText = `Congrats! ${this.Phrase.adjective[0].toUpperCase()}${this.Phrase.adjective.substring(1, this.Phrase.adjective.length)} ${this.Phrase.noun} always win.`; 
+            endMessage.innerText = `Congrats! ${this.Phrase.adjective[0].toUpperCase()}${this.Phrase.adjective.substring(1, this.Phrase.adjective.length)} ${this.Phrase.noun} always win. Now, enough of this. Go ${this.Phrase.verb}. `; 
             endMessage.style.display = 'inline-block';
         }   else {
             bodyNode.classList.add('body-lose');
             this.revealPhrase();
-            endMessage.innerText = `So close! ${this.Phrase.adjective[0].toUpperCase()}${this.Phrase.adjective.substring(1, this.Phrase.adjective.length)} ${this.Phrase.noun} are a tough guess.`; 
+            endMessage.innerText = `So close! ${this.Phrase.adjective[0].toUpperCase()}${this.Phrase.adjective.substring(1, this.Phrase.adjective.length)} ${this.Phrase.noun} are a tough guess. Next time, don't ${this.Phrase.verb}.`; 
             endMessage.style.display = 'inline-block';
             return;
         }

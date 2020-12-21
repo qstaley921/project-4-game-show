@@ -3,10 +3,11 @@
  * Phrase.js */
 
  class Phrase {
-    constructor(phrase, noun, adjective) {
+    constructor(phrase, noun, adjective, verb) {
         this.phrase = phrase.toLowerCase(); // holds a string
         this.noun = noun;
         this.adjective = adjective;
+        this.verb = verb;
     }
 
     /**
