@@ -30,6 +30,14 @@ body {
   height: 100vh;
 }
 
+.body-win {
+    background: var(--color-win);
+}
+
+.body-lose {
+    background: var(--color-lose);
+}
+
 li, ol, ul {
   padding: 0;
   display: inline-block;
@@ -46,6 +54,11 @@ h1 {
   font-size: 30px;
 }
 
+#game-over-message {
+    display: none;
+    color: white;
+}
+
 button {
   margin: 6px;
   border: 1px solid transparent;
@@ -60,6 +73,11 @@ button {
   cursor: pointer;
 }
 
+#btn-div {
+    display: none;
+}
+
+#btn__start,
 #btn__reset {
 	width: 200px;
 	margin: 0 auto;
@@ -92,6 +110,10 @@ button {
 
 /* Phrase */
 
+.word {
+    margin-right: 25px;
+}
+
 .letter {
   font-size: var(--font-size-medium);
   height: 65px;
@@ -120,6 +142,10 @@ button {
   border-radius: 5px;
   -webkit-animation-duration: .5s;
   animation-duration: .5s;
+}
+
+.reveal {
+    background-color: var(--color-neutral);
 }
 
 

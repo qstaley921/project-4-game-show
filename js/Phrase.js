@@ -3,23 +3,45 @@
  * Phrase.js */
 
  class Phrase {
-    constructor(phrase) {
+    constructor(phrase, noun, adjective) {
         this.phrase = phrase.toLowerCase(); // holds a string
+        this.noun = noun;
+        this.adjective = adjective;
     }
 
     /**
      * Displays phrase on game board
      */
     addPhraseToDisplay() {
-        for(const i in this.phrase) { // for letters in phrase string
-            const li = document.createElement('li');
-            if (this.phrase[i] === ' ') { // if a space character
-                li.className = `hide space`;
-            } else {   // if a letter
-                li.className = `hide letter ${this.phrase[i]}`;
+        const phraseArray = [...this.phrase]; // converts phrase to character array. 
+        const wordCount = getWordCount();
+        function getWordCount() {
+            let count = 1;
+            for(const char of phraseArray) {
+                if (/\s/.test(char)) {
+                    count += 1;
+                }
             }
-            li.innerText = this.phrase[i]; 
-            ulElement.appendChild(li);
+            return count;
+        }
+
+        // This loopty-loop puts each word into its own ul so words aren't broken in the middle depending on browser width. 
+        for (let i = 0; i < wordCount; i++) { // for number of words
+            const ul = document.createElement('ul'); 
+            ul.className = `word`;
+            phraseHTML.appendChild(ul); // adds a UL to the HTML div
+            for (let i = 0; i < phraseArray.length;) { // until phraseArray has been shifted to 0
+                const li = document.createElement('li');
+                if (/\s/.test(phraseArray[i])) { // if a space
+                    phraseArray.shift();
+                    break;
+                } else { // assumed letter if not a space; Originally I had it the other way around; it really make a difference. 
+                    li.className = `hide letter`;
+                    li.innerText = phraseArray[i];
+                    ul.appendChild(li); // adds a LI to current UL 
+                    phraseArray.shift();
+                }
+            } 
         }
     }
 
@@ -30,9 +52,8 @@
      * passes matches to this.showMatches()
      */
     checkLetter( letter ) {
-        const nodeList = document.getElementsByClassName('letter'); // selects all the phrase's letters
         const matches = [];
-        for(let node of nodeList) {
+        for(const node of letterNodes) {
             if(node.innerText === letter) {
                 matches.push(node);
             }

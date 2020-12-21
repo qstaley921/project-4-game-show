@@ -3,15 +3,23 @@
  * app.js */
 
 const game = new Game(); 
-const startBTN = document.querySelector('#btn__reset');
+const bodyNode = document.querySelector('body');
+const startBTN = document.querySelector('#btn__start');
+const btnDiv = document.querySelector('#btn-div');
+const resetBTN = document.querySelector('#btn__reset');
+const endMessage = document.querySelector('#game-over-message');
 const keyboardHTML = document.querySelector('#qwerty');
 const keysHTML = keyboardHTML.querySelectorAll('.key');
 const overlayHTML = document.querySelector('#overlay');
-const messageHTML = overlayHTML.querySelector('h1');
-const ulElement = document.querySelector('#phrase > ul');
+const phraseHTML = document.querySelector('#phrase');
 const heartNodes = document.querySelectorAll('.tries > img');
+const letterNodes = document.getElementsByClassName('letter'); // selects all the phrase's letters
 
 startBTN.addEventListener('click', () => {
+    game.startGame();
+});
+
+resetBTN.addEventListener('click', () => {
     game.startGame();
 });
 

@@ -14,11 +14,15 @@
      */
     createPhrase( ) {
         const phrases = [];
+        let adjective = '';
+        let noun = '';
+        let declaration = '';
+        let verb = '';
         const words = {  // excuse the absurdities; I got carried away. This is an object of arrays. 
-            adjectives: ['rich', 'ugly', 'divorced', 'skilled','widowed', 'frisky', 'pregnant', 'infected', 'smart', 'scared', 'pretty', 'nice', 'evil', 'virgin', 'married', 'baptised', 'acquitted', 'drunk', 'christian'],
-            nouns: ['dogs', 'cats', 'husbands', 'women', 'athletes','housewives', 'zoomers', 'cosmonauts','immigrants','hipsters', 'lawyers', 'priests', 'artists', 'fish', 'zombies', 'veterans', 'inmates', 'hippies'],
-            declarations: ['never', 'always', 'rarely', 'long to','often', 'cannot', 'refuse to', 'are willing to', 'love to', 'eagerly'],
-            verbs: ['cry', 'smile', 'snuggle','surrender', 'offend', 'lose', 'win','say thank you','settle','beg', 'spoon','die', 'nark', 'drive','eat', 'lie', 'sleep', 'fart', 'sweat', 'puke', 'help', 'talk', 'divorce', 'kill', 'have sex', 'remarry', 'pray', 'protest']
+            adjective: ['rich', 'ugly', 'divorced', 'skilled','widowed', 'frisky', 'pregnant', 'infected', 'smart', 'scared', 'pretty', 'nice', 'evil', 'virgin', 'married', 'baptised', 'acquitted', 'drunk', 'christian'],
+            noun: ['dogs', 'cats', 'husbands', 'women', 'athletes','housewives', 'zoomers', 'cosmonauts','immigrants','hipsters', 'lawyers', 'priests', 'artists', 'fish', 'zombies', 'veterans', 'inmates', 'hippies'],
+            declaration: ['never', 'always', 'rarely', 'long to','often', 'cannot', 'refuse to', 'are willing to', 'love to', 'eagerly'],
+            verb: ['cry', 'smile', 'snuggle','surrender', 'offend', 'lose', 'win','say thank you','settle','beg', 'spoon','die', 'nark', 'drive','eat', 'lie', 'sleep', 'fart', 'sweat', 'puke', 'help', 'talk', 'divorce', 'kill', 'have sex', 'remarry', 'pray', 'protest']
         } 
         /**
          * generates a random index based on @param.length
@@ -28,11 +32,15 @@
         let randomPhrase = '';
 
         for (let prop in words) {
-            const wordList = words[`${prop}`]; // this is just the words.prop array
-            randomPhrase += `${wordList[randomIndex(wordList)]} `; // adds a random word to the random phrase
+            const list = words[`${prop}`];
+            const index = randomIndex(list);
+            if (prop === 'adjective') adjective = words[`${prop}`][index];
+            if (prop === 'noun') noun = words[`${prop}`][index];
+            if (prop === 'declaration') declaration = words[`${prop}`][index];
+            if (prop === 'verb') verb = words[`${prop}`][index];
         }
-
-        return new Phrase(randomPhrase); 
+        randomPhrase = `${adjective} ${noun} ${declaration} ${verb}`; 
+        return new Phrase(randomPhrase, noun, adjective); 
     }
 
     /**
@@ -45,7 +53,11 @@
      */
     startGame() {
         // resets prior game. Step 0. 
-        ulElement.innerHTML = ''; // clears previous phrase list items
+        keyboardHTML.style.display = ''; // re-shows keyboard
+        btnDiv.style.display = 'none'; // re-hides play button
+        bodyNode.className = ''; // resets body color
+        phraseHTML.innerHTML = ''; // clears previous phrase list items
+        endMessage.style.display = '';
         for (let key of keysHTML) { // resets 'qwerty key' classes
             key.className = 'key';
         }
@@ -74,18 +86,18 @@
         const letter = target.innerText; // a 1 character string
         const matches = this.Phrase.checkLetter(letter); // returns an array of nodes whose `letter.innerText` is the same as `target.innerText`
 
-        if(matches.length > 0) { // if a match was made
+        if (matches.length > 0) { // if a match was made
             target.classList.add('chosen'); 
             this.Phrase.showMatches(matches); 
-        } else if ( matches.length === 0 && target.classList[1] !== 'wrong') { 
+            if (this.checkForWin()) {
+                this.gameOver(true);
+            }
+        }  
+        
+        if ( matches.length === 0 && target.classList[1] !== 'wrong') { 
             target.classList.add('wrong');
             this.removeLife();
         }
-
-        if (this.checkForWin()) {
-            this.gameOver(true);
-        }
-     
     }
 
     /**
@@ -93,9 +105,8 @@
      * @returns {boolean} win - if the game is won
      */
     checkForWin() {
-        const letterNodes = document.querySelectorAll('.letter');
-        for (let letter of letterNodes) { // for all the letters
-            for (let className of letter.classList) { // for all class names in each letter
+        for (const letter of letterNodes) { // for all the letters
+            for (const className of letter.classList) { // for all class names in each letter
                 if (className === 'hide') {
                     return false;
                 }
@@ -119,17 +130,39 @@
     }
 
     /**
+     * Reveals the letters that weren't guessed on GameOver
+     */
+    revealPhrase() {
+        for (const node of letterNodes) { // for all the letter nodes
+            for (const className of node.classList) { // for all class names in each letter
+                if (className === 'hide') {
+                    node.classList.add('show');
+                    node.classList.add('reveal');
+                    node.classList.remove('hide');
+                }
+            }
+        }
+    }
+
+    /**
     * Displays game over message
     * @param {boolean} gameWon - Whether or not the user won the game
     */
     gameOver(gameWon) {
-        overlayHTML.style.display = '';
+        keyboardHTML.style.display = 'none';
+        btnDiv.style.display = 'block';
+        endMessage.innerText = '';
+        
         if (gameWon) {
-            overlayHTML.classList.add('win');
-            messageHTML.innerText = `Congrats! You correctly guessed the phrase: "${this.Phrase.phrase}"`;
+            bodyNode.classList.add('body-win');
+            endMessage.innerText = `Congrats! ${this.Phrase.adjective[0].toUpperCase()}${this.Phrase.adjective.substring(1, this.Phrase.adjective.length)} ${this.Phrase.noun} always win.`; 
+            endMessage.style.display = 'inline-block';
         }   else {
-            overlayHTML.classList.add('lose');
-            messageHTML.innerText = `Sorry, you lose. You did not guess the phrase: "${this.Phrase.phrase}"`;
+            bodyNode.classList.add('body-lose');
+            this.revealPhrase();
+            endMessage.innerText = `So close! ${this.Phrase.adjective[0].toUpperCase()}${this.Phrase.adjective.substring(1, this.Phrase.adjective.length)} ${this.Phrase.noun} are tough to guess.`; 
+            endMessage.style.display = 'inline-block';
+            return;
         }
     };
 
